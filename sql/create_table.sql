@@ -4,9 +4,47 @@
 
 -- 创建库
 create database if not exists my_db;
+create database if not exists smart_traffic_assessment;
+
+-- 创建场景表
+CREATE TABLE if not exists Scenarios (
+                           scenario_id INT AUTO_INCREMENT PRIMARY KEY,
+                           scenario_name VARCHAR(255) NOT NULL
+);
+
+-- 创建问题及解决方案表
+CREATE TABLE if not exists Issues_Solutions (
+                                  id INT AUTO_INCREMENT PRIMARY KEY,
+                                  scenario_id INT,
+                                  root_cause TEXT,
+                                  issue_description TEXT,
+                                  solution_description TEXT,
+                                  FOREIGN KEY (scenario_id) REFERENCES Scenarios(scenario_id)
+);
+
+CREATE TABLE `form_data` (
+                             `id` VARCHAR(36) NOT NULL, -- 假设使用UUID作为主键
+                             `session_id` VARCHAR(36) NOT NULL,
+                             `data` TEXT, -- 存储序列化的表单数据
+                             `file_references` TEXT, -- 存储序列化的文件引用信息
+                             `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP, -- 记录数据创建时间
+                             PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `file_info` (
+                             `id` BIGINT NOT NULL AUTO_INCREMENT, -- 自增主键
+                             `form_data_id` VARCHAR(36), -- 关联的FormData记录的ID
+                             `original_file_name` VARCHAR(255), -- 文件的原始名称
+                             `file_path` VARCHAR(255), -- 文件存储的路径或URL
+                             `file_type` VARCHAR(50), -- 文件类型
+                             `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP, -- 记录文件信息创建时间
+                             PRIMARY KEY (`id`),
+                             INDEX `idx_form_data_id` (`form_data_id`) -- 可根据需要添加对form_data_id的索引
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 切换库
 use my_db;
+use smart_traffic_assessment;
 
 -- 用户表
 create table if not exists user
