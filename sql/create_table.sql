@@ -33,13 +33,15 @@ CREATE TABLE `form_data` (
 
 CREATE TABLE `file_info` (
                              `id` BIGINT NOT NULL AUTO_INCREMENT, -- 自增主键
+                             `session_id` VARCHAR(36), -- 存储会话的UUID
                              `form_data_id` VARCHAR(36), -- 关联的FormData记录的ID
                              `original_file_name` VARCHAR(255), -- 文件的原始名称
                              `file_path` VARCHAR(255), -- 文件存储的路径或URL
                              `file_type` VARCHAR(50), -- 文件类型
                              `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP, -- 记录文件信息创建时间
                              PRIMARY KEY (`id`),
-                             INDEX `idx_form_data_id` (`form_data_id`) -- 可根据需要添加对form_data_id的索引
+                             INDEX `idx_form_data_id` (`form_data_id`), -- 可根据需要添加对form_data_id的索引
+                             INDEX `idx_session_id` (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 切换库

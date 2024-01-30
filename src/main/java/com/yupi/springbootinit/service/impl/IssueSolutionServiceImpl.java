@@ -27,13 +27,13 @@ public class IssueSolutionServiceImpl implements IssueSolutionService {
     public void saveIssueSolutionsFromDTOs(List<IssueSolutionDTO> issueSolutionDTOS) {
         issueSolutionDTOS.forEach(dto -> {
             IssueSolution issueSolution = new IssueSolution();
-            issueSolution.setRootCause(dto.getRootCause());
-            issueSolution.setIssueDescription(dto.getIssueDescription());
-            issueSolution.setSolutionDescription(dto.getSolutionDescription());
+            issueSolution.setRoot_cause(dto.getRootCause());
+            issueSolution.setIssue_description(dto.getIssueDescription());
+            issueSolution.setSolution_description(dto.getSolutionDescription());
 
             // 设置外键或其他需要的属性
             // issueSolution.setScenarioId(...);
-            issueSolution.setScenarioId(4);
+//            issueSolution.setScenario_id(4);
 
             issueSolutionMapper.insert(issueSolution);
         });

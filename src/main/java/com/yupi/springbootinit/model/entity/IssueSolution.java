@@ -9,27 +9,27 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-@TableName("Issues_Solutions")
+@TableName("issues_solutions")
 @ApiModel(description = "问题及解决方案实体")
 public class IssueSolution {
 
     @TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "ID")
-    private Integer id;
+    private Long id;
 
     @ApiModelProperty(value = "场景ID")
     @TableField("scenario_id")
-    private Integer scenarioId;
+    private Integer scenario_id;
 
     @ApiModelProperty(value = "根本原因")
     @TableField("root_cause")
-    private String rootCause;
+    private String root_cause;
 
     @ApiModelProperty(value = "问题描述")
     @TableField("issue_description")
-    private String issueDescription;
+    private String issue_description;
 
     @ApiModelProperty(value = "解决方案描述")
     @TableField("solution_description")
-    private String solutionDescription;
+    private String solution_description;
 }
