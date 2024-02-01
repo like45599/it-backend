@@ -32,4 +32,10 @@ public class SearchController {
         List<SearchEsDTO> searchResults  = searchService.searchByRootCause(rootCause, scenarioId);
         return ResponseEntity.ok(searchResults);
     }
+
+    @GetMapping("/searchAll")
+    public ResponseEntity<List<SearchEsDTO>> searchAll(@RequestParam String rootCause) {
+        List<SearchEsDTO> results = searchService.searchAllByRootCause(rootCause);
+        return ResponseEntity.ok(results);
+    }
 }

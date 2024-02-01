@@ -36,8 +36,8 @@ public class ISearchServiceImpl extends ServiceImpl<IssueSolutionMapper, IssueSo
         // 构建查询
         NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
 
-        // 如果 scenarioId 不为 null，则添加过滤条件
-        if (scenarioId != null) {
+        // 根据 scenarioId 是否特定值来构建查询条件
+        if (scenarioId != null && scenarioId != -1) { // 假设 -1 表示“综合查询”
             queryBuilder.withQuery(
                     QueryBuilders.boolQuery()
                             .must(QueryBuilders.matchQuery("root_cause", rootCause))
@@ -55,6 +55,25 @@ public class ISearchServiceImpl extends ServiceImpl<IssueSolutionMapper, IssueSo
         // 将搜索结果转换为 DTO 列表并返回
         return searchHits.getSearchHits().stream()
                 .map(hit -> hit.getContent())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SearchEsDTO> searchAllByRootCause(String rootCause) {
+        // 构建查询
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+
+        // 单字段查询
+        queryBuilder.withQuery(QueryBuilders.matchQuery("root_cause", rootCause));
+
+        queryBuilder.withPageable(PageRequest.of(0, 10)); // 限制返回的结果数量，这里以10为例
+
+        // 执行搜索
+        SearchHits<SearchEsDTO> searchHits = elasticsearchRestTemplate.search(queryBuilder.build(), SearchEsDTO.class);
+
+        // 将搜索结果转换为 DTO 列表并返回
+        return searchHits.getSearchHits().stream()
+                .map(SearchHit::getContent)
                 .collect(Collectors.toList());
     }
 }

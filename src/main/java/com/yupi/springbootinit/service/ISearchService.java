@@ -20,4 +20,7 @@ public interface ISearchService extends IService<IssueSolution> {
      * @return 匹配的问题及解决方案列表
      */
     List<SearchEsDTO> searchByRootCause(String rootCause, Integer scenarioId);
+
+    List<SearchEsDTO> searchAllByRootCause(String rootCause);
+
 }

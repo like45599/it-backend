@@ -47,6 +47,8 @@ public class DocumentController {
                 return ResponseEntity.badRequest().body("No files uploaded");
             }
 
+            // 初始化一个计数器用于图片编号
+            int imageCounter = 1;
 
             // 处理上传的文件
             for (MultipartFile file : files) {
@@ -54,9 +56,23 @@ public class DocumentController {
                     String originalFileName = file.getOriginalFilename();
                     Path filePath = Files.createTempFile("upload_", originalFileName);
                     file.transferTo(filePath.toFile());
-                    allParams.put("image_" + originalFileName, filePath.toString()); // 以文件名作为键，前缀以区分
+
+                    // 为图片文件名添加编号
+                    allParams.put("image_" + imageCounter, filePath.toString());
+
+                    // 处理完一个文件后，计数器增加
+                    imageCounter++;
                 }
             }
+//            // 处理上传的文件
+//            for (MultipartFile file : files) {
+//                if (!file.isEmpty()) {
+//                    String originalFileName = file.getOriginalFilename();
+//                    Path filePath = Files.createTempFile("upload_", originalFileName);
+//                    file.transferTo(filePath.toFile());
+//                    allParams.put("image_" + originalFileName, filePath.toString()); // 以文件名作为键，前缀以区分
+//                }
+//            }
 
             // 解析selectedResultsJson
             List<Map<String, String>> selectedResults = new ObjectMapper().readValue(selectedResultsJson, new TypeReference<List<Map<String, String>>>() {});
@@ -69,7 +85,7 @@ public class DocumentController {
 
             // 构建并执行 Python 脚本命令
             String pythonExecutablePath = "D:\\Data\\python_\\test\\venv\\Scripts\\python.exe"; // 假设 Python 安装在此路径
-            String pythonScriptPath = "D:\\Data\\python_\\test\\venv\\test.py"; // Python 脚本的完整路径
+            String pythonScriptPath = "D:\\Data\\python_\\test\\venv\\wordcopy.py"; // Python 脚本的完整路径
             ProcessBuilder processBuilder = new ProcessBuilder(pythonExecutablePath, pythonScriptPath, tempFile.getAbsolutePath());
 
             processBuilder.redirectErrorStream(true); // 将错误输出重定向到标准输出
